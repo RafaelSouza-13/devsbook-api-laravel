@@ -7,11 +7,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'create', 'unautorized']]);
-    }
-
+    public function create(){
+            $array = ['error' => ''];
+            return $array;
+        }
     /**
      * Get a JWT via given credentials.
      *

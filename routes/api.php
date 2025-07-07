@@ -12,35 +12,12 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-
-Route::group([
-    'middleware' => 'api',
-    'prefix' => 'auth'
-
-], function ($router) {
-    Route::get('/401', 'AuthController@unauthorized')->name('login');
-
-    Route::post('/auth/login', 'AuthController@login');
-    Route::post('/user', 'UserController@create');
-    Route::post('/auth/logout', 'AuthController@logout');
-    Route::post('/auth/refresh', 'AuthController@refresh');
-
-    Route::put('/user', 'UserController@update');
-    Route::post('/user/avatar', 'UserController@updateAvatar');
-    Route::put('/user/cover', 'UserController@updateCover');
-
-    Route::get('/feed', 'FeedController@read');
-    Route::get('/user/feed', 'FeedController@userFeed');
-    Route::get('/user/{id}/feed', 'FeedController@userFeed');
-
-    Route::get('/user', 'UserController@read');
-    Route::get('/user/{id}', 'UserController@read');
-
-    Route::post('/feed', 'FeedController@create');
-
-    Route::post('/post/{id}/like', 'PostController@like');
-    Route::post('/post/{id}/comment', 'PostController@comment');
-
-    Route::get('/search', 'SearchController@search');
+Route::middleware('auth:api')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/user', [UserController::class, 'create']);
+
+
+
 
