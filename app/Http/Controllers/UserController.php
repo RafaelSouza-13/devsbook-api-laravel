@@ -2,41 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
+
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Actions\UserAction;
 
 class UserController extends Controller
 {
-    private $loggedUser;
-
-    public function create(UserRequest $request){
+    protected UserAction $userAction;
+    public function __construct(UserAction $userAction){
+        $this->userAction = $userAction;
+    }
+    public function create(StoreUserRequest $request){
         $data = $request->validated();
-        $user = new User();
-        $hash = password_hash($data['password'], PASSWORD_DEFAULT);
-        $user->name = $data['name'];
-        $user->email = $data['email'];
-        $user->password = $hash;
-        $user->birthdate = $data['birthdate'];
-        $user->save();
-        $token = auth()->attempt([
-            'email' => $data['email'],
-            'password' => $data['password'],
-        ]);
-        if (!$token) {
+            try {
+            $result = $this->userAction->create($data);
+
+            return response()->json([
+                'success' => true,
+                'data' => $result['user'],
+                'token' => $result['token'],
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL(),
+            ], 201);
+        } catch (\RuntimeException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Erro ao gerar token após cadastro',
+                'message' => $e->getMessage(),
             ], 500);
         }
-        return response()->json([
-            'success' => true,
-            'data' => $user,
-            'token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL(),
-        ], 201);
+    }
+
+    public function update(UpdateUserRequest $request){
+        $user = $request->user();
+        $data = $request->validated();
+        // Atualiza campos opcionais, se estiverem presentes
+    if (isset($data['name'])) {
+        $user->name = $data['name'];
+    }
+
+    if (isset($data['email'])) {
+        $user->email = $data['email'];
+    }
+
+    if (isset($data['birthdate'])) {
+        $user->birthdate = $data['birthdate'];
+    }
+
+    if (isset($data['password'])) {
+        $user->password = Hash::make($data['password']);
+    }
+
+    $user->save();
+    return response()->json([
+        'success' => true,
+        'message' => 'Usuário atualizado com sucesso.',
+        'data' => $user,
+    ], 200);
     }
 }
