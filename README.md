@@ -7,55 +7,117 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# 📖 Projeto - Devsbook
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Projeto em laravel de uma API para gerenciar requisições HTTP de um sistema de rede social.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ⚙️ Tecnologias Utilizadas
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3
+- Laravel 12
+- Composer
+- Git
+- MYSQL
 
-## Learning Laravel
+## 💡 Funcionalidades
+- [x] Autenticação utilizando JWT(JSON WEB TOKEN)
+- [x] Validação de dados com FormRequest
+- [x] Login, logout, refresh para token
+- [x] Criação de usuário
+- [x] Envio de imagens para avatar e cover
+- [x] Publicação de posts(texto ou foto)
+- [ ] Listando o feed
+- [ ] Feed do usuário
+- [ ] Like em post
+- [ ] Comentando em post
+- [ ] Buscando usuários
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🏗️ Estrutura do Projeto
 
-## Laravel Sponsors
+Abaixo está a organização das principais pastas e arquivos deste projeto Laravel:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 📂 Diretórios Principais
 
-### Premium Partners
+- **app/**  
+  Contém a lógica de negócio da aplicação:
+  - `Http/`: Controladores, Requests.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- **bootstrap/**  
+  Inicialização do framework e configuração do autoload.
 
-## Contributing
+- **config/**  
+  Arquivos de configuração de serviços e do sistema.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **database/**  
+  Estrutura de banco de dados:
+  - `factories/`: Criação de dados para testes.
+  - `migrations/`: Definições de estrutura das tabelas.
+  - `seeders/`: Popular o banco com dados iniciais.
 
-## Code of Conduct
+- **public/**  
+  Pasta pública acessível pela web. Contém o `index.php` e os assets públicos.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **resources/**  
+  Recursos da aplicação:
+  - `views/`: Templates Blade.
+  - `css/`: Arquivos CSS.
+  - `js/`: Arquivos JavaScript.
 
-## Security Vulnerabilities
+- **routes/**  
+  Definições de rotas:
+  - `web.php`: Rotas para o ambiente web.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **storage/**  
+  Arquivos gerados ou manipulados pela aplicação (logs, cache, uploads).
 
-## License
+- **tests/**  
+  Testes automatizados.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **vendor/**  
+  Dependências instaladas via Composer (não edite arquivos aqui).
+
+---
+
+> Essa estrutura facilita a manutenção, escalabilidade e organização do projeto conforme boas práticas do Laravel.
+
+
+## 🛠️ Pré-requisitos
+Antes de começar, certifique-se de ter instalado: 
+- PHP 8.3 ou superior
+- Composer
+
+## 🚀 Executando o projeto
+Para executar este projeto Laravel, certifique-se de ter instalado o PHP 8.3 ou superior, Composer.
+
+Siga as etapas abaixo para executar este projeto Laravel em sua máquina local:
+
+1. **Clone o repositório**  
+   ```bash
+   git clone https://github.com/RafaelSouza-13/devsbook-api-laravel.git
+
+2. **Acesse o diretório do projeto**
+   ```bash
+   cd alterar-depois
+
+3. **Instale as dependências do projeto**
+   ```bash
+   composer install
+
+4. **Configure as variáveis de ambiente**
+    Copie o arquivo `.env.example` para `.env` e configure as variáveis de ambiente conforme o seu ambiente local (como configurações de banco de dados).
+
+6. **Inicie o servidor de desenvolvimento**
+   ```bash
+   php artisan serve
+
+Agora você pode acessar o projeto em `http://localhost:8000`.
+
+## 📚 Referência
+
+Este projeto foi desenvolvido como parte de um aprendizado baseado na **b7web**. A princípio desenvolvido em laravel 8 porém utilizei e adaptei para laravel 12, assim como tentei separar responsabilidades de código.
+
+## 🛡️ License
+
+The Laravel framework is open-sourced software licensed under the. Este projeto está licenciado sob a [MIT license](https://opensource.org/licenses/MIT).
