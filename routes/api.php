@@ -20,6 +20,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/user/avatar', [UserController::class, 'updateAvatar']);
     Route::post('/user/cover', [UserController::class, 'updateCover']);
+
+    Route::post('/feed', [FeedController::class, 'create']);
 });
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/user', [UserController::class, 'create']);
