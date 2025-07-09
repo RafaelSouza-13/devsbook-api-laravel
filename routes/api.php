@@ -18,6 +18,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/user/update', [UserController::class, 'update']);
 
+    Route::post('/user/avatar', [UserController::class, 'updateAvatar']);
+    Route::post('/user/cover', [UserController::class, 'updateCover']);
 });
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/user', [UserController::class, 'create']);

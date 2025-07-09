@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Requests\UpdateAvatarRequest;
+use App\Http\Requests\UpdateCoverRequest;
+use Intervention\Image\Laravel\Facades\Image;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -62,5 +65,41 @@ class UserController extends Controller
         'message' => 'Usuário atualizado com sucesso.',
         'data' => $user,
     ], 200);
+    }
+
+    public function updateAvatar(UpdateAvatarRequest $request){
+        $request->validated();
+        $user = $request->user();
+
+        // if ($request->hasFile('avatar'))
+        $image = $request->file('avatar');
+        $filename = md5(time().rand(0, 9999)).'.jpg';
+        $destPath = public_path('/media/avatars');
+        $img = Image::read($image->path())->resize(200, 200)->save($destPath.'/'.$filename);
+        $user->avatar = $filename;
+        $user->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Avatar atualizado com sucesso.',
+            'url' => url('media/avatars/'.$filename),
+        ], 200);
+    }
+
+    public function updateCover(UpdateCoverRequest $request){
+        $request->validated();
+        $user = $request->user();
+
+        // if ($request->hasFile('avatar'))
+        $image = $request->file('cover');
+        $filename = md5(time().rand(0, 9999)).'.jpg';
+        $destPath = public_path('/media/covers');
+        $img = Image::read($image->path())->resize(850, 310)->save($destPath.'/'.$filename);
+        $user->avatar = $filename;
+        $user->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Cover atualizado com sucesso.',
+            'url' => url('media/covers/'.$filename),
+        ], 200);
     }
 }
