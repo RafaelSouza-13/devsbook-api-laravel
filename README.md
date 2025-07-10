@@ -26,7 +26,7 @@ Projeto em laravel de uma API para gerenciar requisições HTTP de um sistema de
 - [x] Criação de usuário
 - [x] Envio de imagens para avatar e cover
 - [x] Publicação de posts(texto ou foto)
-- [ ] Listando o feed
+- [x] Listando o feed
 - [ ] Feed do usuário
 - [ ] Like em post
 - [ ] Comentando em post

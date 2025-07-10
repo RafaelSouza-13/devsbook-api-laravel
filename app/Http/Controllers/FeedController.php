@@ -90,4 +90,14 @@ class FeedController extends Controller
             'id_post' => $post->id,
         ], 200);
     }
+
+    public function userFeed($id = null){
+        if ($id === null) {
+            $id = auth()->id();
+        }
+        $postList = Post::where('user_id', $id)
+            ->orderBy('created_at', 'desc')->paginate(2);
+        $posts = $this->postListMoreInformations($postList, $id);
+        return response()->json($posts, 200);
+    }
 }

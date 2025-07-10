@@ -23,6 +23,10 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/feed', [FeedController::class, 'index']);
     Route::post('/feed', [FeedController::class, 'create']);
+
+    Route::get('/user/feed', [FeedController::class, 'userFeed']);
+    Route::get('/user/{id?}/feed', [FeedController::class, 'userFeed']);
+
 });
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/user', [UserController::class, 'create']);
