@@ -11,9 +11,16 @@ use App\Models\UserRelation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Laravel\Facades\Image;
+use App\Services\FeedService;
 
 class FeedController extends Controller
 {
+    protected FeedService $service;
+
+    public function __construct(FeedService $service)
+    {
+        $this->service = $service;
+    }
     public function index(){
         $clients = Post::paginate(2);
         $perPage = 2;
@@ -27,41 +34,11 @@ class FeedController extends Controller
         // Pegar os posts ordenado por data
         $postList = Post::whereIn('user_id', $usersId)
             ->orderBy('created_at', 'desc')->paginate(2);
-        $posts = $this->postListMoreInformations($postList, auth()->user()->id);
+        $posts = $this->service->postListMoreInformations($postList, auth()->user()->id);
         return response()->json($posts, 200);
     }
 
-    private function postListMoreInformations($postList, $currentUserId){
-        $postList->getCollection()->transform(function ($postItem) use ($currentUserId) {
-            $postItem->mine = $postItem->user_id == $currentUserId;
-
-            // preencher informações do usuário
-            $userInfo = User::find($postItem->user_id);
-            $userInfo->avatar = url('media/avatars/' . $userInfo->avatar);
-            $userInfo->cover = url('media/covers/' . $userInfo->cover);
-            $postItem->user = $userInfo;
-
-            // likes
-            $postItem->likeCount = PostLike::where('post_id', $postItem->id)->count();
-            $postItem->liked = PostLike::where('post_id', $postItem->id)
-                                ->where('user_id', $currentUserId)
-                                ->exists();
-
-            // comentários
-            $comments = PostComment::where('post_id', $postItem->id)->get();
-            foreach ($comments as $comment) {
-                $user = User::find($comment->user_id);
-                $user->avatar = url('media/avatars/' . $user->avatar);
-                $user->cover = url('media/covers/' . $user->cover);
-                $comment->user = $user;
-            }
-            $postItem->comments = $comments;
-
-            return $postItem;
-        });
-
-        return $postList;
-    }
+    
 
 
     public function create(FeedRequest $request){
@@ -97,7 +74,7 @@ class FeedController extends Controller
         }
         $postList = Post::where('user_id', $id)
             ->orderBy('created_at', 'desc')->paginate(2);
-        $posts = $this->postListMoreInformations($postList, $id);
+        $posts = $this->service->postListMoreInformations($postList, $id);
         return response()->json($posts, 200);
     }
 }
