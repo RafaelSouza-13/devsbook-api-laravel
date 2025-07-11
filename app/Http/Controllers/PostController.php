@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\CommentRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\Post;
+use App\Models\PostComment;
 use App\Models\PostLike;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -33,6 +36,23 @@ class PostController extends Controller
             if($post['type'] === 'photo'){
                 $post['body'] = url('media/uploads/'.$post['body']);
             }
+            return response()->json($post, 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'post não encontrado'], 404);
+        }
+    }
+
+    public function comment(CommentRequest $request, $id){
+        try {
+            $post = Post::findOrFail($id);
+            $data = $request->validated();
+            $txt = $data['txt'];
+            $newComment = new PostComment();
+            $newComment->post_id = $id;
+            $newComment->user_id = auth()->id();
+            $newComment->body = $txt;
+            $newComment->created_at = now();
+            $newComment->save();
             return response()->json($post, 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'post não encontrado'], 404);
