@@ -12,6 +12,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Actions\UserAction;
+use App\Models\Post;
+use App\Models\UserRelation;
+use Carbon\Carbon;
+use Nette\Utils\DateTime;
 
 class UserController extends Controller
 {
@@ -101,5 +105,30 @@ class UserController extends Controller
             'message' => 'Cover atualizado com sucesso.',
             'url' => url('media/covers/'.$filename),
         ], 200);
+    }
+
+    public function read($id = null){
+        if ($id === null) {
+            $id = auth()->id();
+        }
+        $info = User::findOrFail($id);
+        $info['avatar'] = url('media/avatars/'.$info['avatar']);
+        $info['cover'] = url('media/avatars/'.$info['cover']);
+        $info['me'] = $info['id'] == auth()->id() ? true : false;
+        $dateFrom = new DateTime($info['birthdate']);
+        $today = Carbon::now();
+        $info['age'] = $today->diff($dateFrom)->y;
+
+        $info['followers'] = UserRelation::where('user_to', $info['id'])->count();
+        $info['following'] = UserRelation::where('user_from', $info['id'])->count();
+        $info['photoCount'] = Post::where('user_id', $info['id'])
+            ->where('type', 'photo')->count();
+
+        $hasRelation = UserRelation::where('user_from', auth()->id())->where('user_to', $info['id'])->count();
+        $info['isFollowing'] = $hasRelation > 0 ? true : false;
+
+
+        
+        return response()->json($info, 200);
     }
 }

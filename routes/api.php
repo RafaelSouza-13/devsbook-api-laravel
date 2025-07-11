@@ -27,6 +27,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user/feed', [FeedController::class, 'userFeed']);
     Route::get('/user/{id?}/feed', [FeedController::class, 'userFeed']);
 
+    Route::get('/user', [UserController::class, 'read']);
+    Route::get('/user/{id?}', [UserController::class, 'read']);
+
 });
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/user', [UserController::class, 'create']);
