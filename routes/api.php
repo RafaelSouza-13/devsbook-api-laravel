@@ -30,6 +30,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user', [UserController::class, 'read']);
     Route::get('/user/{id?}', [UserController::class, 'read']);
 
+    Route::post('/post/{id}/like', [PostController::class, 'like']);
+
+
 });
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/user', [UserController::class, 'create']);

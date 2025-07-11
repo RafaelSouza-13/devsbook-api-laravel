@@ -10,6 +10,7 @@ use Intervention\Image\Laravel\Facades\Image;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Hash;
 use App\Actions\UserAction;
 use App\Models\Post;
@@ -111,24 +112,27 @@ class UserController extends Controller
         if ($id === null) {
             $id = auth()->id();
         }
-        $info = User::findOrFail($id);
-        $info['avatar'] = url('media/avatars/'.$info['avatar']);
-        $info['cover'] = url('media/avatars/'.$info['cover']);
-        $info['me'] = $info['id'] == auth()->id() ? true : false;
-        $dateFrom = new DateTime($info['birthdate']);
-        $today = Carbon::now();
-        $info['age'] = $today->diff($dateFrom)->y;
+        try {
+            $info = User::findOrFail($id);
+            $info['avatar'] = url('media/avatars/'.$info['avatar']);
+            $info['cover'] = url('media/avatars/'.$info['cover']);
+            $info['me'] = $info['id'] == auth()->id() ? true : false;
+            $dateFrom = new DateTime($info['birthdate']);
+            $today = Carbon::now();
+            $info['age'] = $today->diff($dateFrom)->y;
 
-        $info['followers'] = UserRelation::where('user_to', $info['id'])->count();
-        $info['following'] = UserRelation::where('user_from', $info['id'])->count();
-        $info['photoCount'] = Post::where('user_id', $info['id'])
-            ->where('type', 'photo')->count();
+            $info['followers'] = UserRelation::where('user_to', $info['id'])->count();
+            $info['following'] = UserRelation::where('user_from', $info['id'])->count();
+            $info['photoCount'] = Post::where('user_id', $info['id'])
+                ->where('type', 'photo')->count();
 
-        $hasRelation = UserRelation::where('user_from', auth()->id())->where('user_to', $info['id'])->count();
-        $info['isFollowing'] = $hasRelation > 0 ? true : false;
-
-
+            $hasRelation = UserRelation::where('user_from', auth()->id())->where('user_to', $info['id'])->count();
+            $info['isFollowing'] = $hasRelation > 0 ? true : false;            
+            return response()->json($info, 200);
+            
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'usuário não encontrado'], 404);
+        }
         
-        return response()->json($info, 200);
     }
 }
