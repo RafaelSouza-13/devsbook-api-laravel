@@ -26,11 +26,13 @@ Projeto em laravel de uma API para gerenciar requisições HTTP de um sistema de
 - [x] Criação de usuário
 - [x] Envio de imagens para avatar e cover
 - [x] Publicação de posts(texto ou foto)
-- [x] Listando o feed
-- [ ] Feed do usuário
-- [ ] Like em post
-- [ ] Comentando em post
-- [ ] Buscando usuários
+- [x] Listando o feed (paginada)
+- [x] Feed do usuário
+- [x] Like e Unlike em post
+- [x] Comentando em post
+- [x] Buscando usuários
+- [x] Listando seguidores/seguindo
+- [x] Listando as fotos (paginada)
 
 
 
@@ -59,15 +61,10 @@ Abaixo está a organização das principais pastas e arquivos deste projeto Lara
 - **public/**  
   Pasta pública acessível pela web. Contém o `index.php` e os assets públicos.
 
-- **resources/**  
-  Recursos da aplicação:
-  - `views/`: Templates Blade.
-  - `css/`: Arquivos CSS.
-  - `js/`: Arquivos JavaScript.
 
 - **routes/**  
   Definições de rotas:
-  - `web.php`: Rotas para o ambiente web.
+  - `api.php`: Rotas para o ambiente de API, com respostas em JSON.
 
 - **storage/**  
   Arquivos gerados ou manipulados pela aplicação (logs, cache, uploads).
