@@ -135,4 +135,40 @@ class UserController extends Controller
         }
         
     }
+
+    public function follow($id){
+        if ($id === null) {
+            $id = auth()->id();
+        }
+        try {
+            $user = User::findOrFail($id);
+            if($user['id'] == auth()->id()){
+                return response()->json([
+                    'error' => 'Você não pode seguir a si mesmo.'
+                ], 400);
+            }
+            $relation = UserRelation::where('user_from', auth()->id())->where('user_to', $id)->exists();
+            if($relation){
+                $relation->delete();
+            }else{
+                $newRelation = new UserRelation();
+                $newRelation->user_from = auth()->id();
+                $newRelation->user_to = $id;
+                $newRelation->save();
+            }
+                  
+            return response()->json($user, 200);
+            
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'usuário não encontrado'], 404);
+        }
+    }
+
+    public function followers(){
+        
+    }
+
+    public function photos(){
+        
+    }
 }
