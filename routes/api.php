@@ -33,7 +33,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/post/{id}/like', [PostController::class, 'like']);
     Route::post('/post/{id}/comment', [PostController::class, 'comment']);
 
-
+    Route::get('/search', [SearchController::class, 'search']);
 
 });
 Route::post('/login', [AuthController::class, 'login']);
