@@ -136,7 +136,7 @@ class UserController extends Controller
         
     }
 
-    public function follow($id){
+    public function follow($id = null){
         if ($id === null) {
             $id = auth()->id();
         }
@@ -164,7 +164,7 @@ class UserController extends Controller
         }
     }
 
-    public function followers($id){
+    public function followers($id = null){
         if ($id === null) {
             $id = auth()->id();
         }
@@ -204,7 +204,4 @@ class UserController extends Controller
         }
     }
 
-    public function photos(){
-        
-    }
 }

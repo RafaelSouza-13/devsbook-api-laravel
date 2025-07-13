@@ -38,9 +38,6 @@ class FeedController extends Controller
         return response()->json($posts, 200);
     }
 
-    
-
-
     public function create(FeedRequest $request){
         $data = $request->validated();
         $post = new Post();
@@ -73,6 +70,17 @@ class FeedController extends Controller
             $id = auth()->id();
         }
         $postList = Post::where('user_id', $id)
+            ->orderBy('created_at', 'desc')->paginate(2);
+        $posts = $this->service->postListMoreInformations($postList, $id);
+        return response()->json($posts, 200);
+    }
+
+    public function userPhotos($id = null){
+        if ($id === null) {
+            $id = auth()->id();
+        }
+        $postList = Post::where('user_id', $id)
+            ->where('type', 'photo')
             ->orderBy('created_at', 'desc')->paginate(2);
         $posts = $this->service->postListMoreInformations($postList, $id);
         return response()->json($posts, 200);
