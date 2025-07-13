@@ -164,8 +164,44 @@ class UserController extends Controller
         }
     }
 
-    public function followers(){
-        
+    public function followers($id){
+        if ($id === null) {
+            $id = auth()->id();
+        }
+        try {
+            $user = User::findOrFail($id);
+            
+            $followers = UserRelation::where('user_to', $id)->get();
+            $following = UserRelation::where('user_from', $id)->get();
+            $followersIds = collect($followers)->pluck('user_from');
+            $followingIds = collect($following)->pluck('user_to');
+            $followersUsers = User::whereIn('id', $followersIds)->get()->keyBy('id');
+            $followingUsers = User::whereIn('id', $followingIds)->get()->keyBy('id');
+            $array['followers'] = [];
+            $array['following'] = [];
+
+            foreach($followers as $follower){
+                $user = $followersUsers[$follower['user_from']];
+                $array['followers'][] = [
+                    'id' => $user['id'],
+                    'name' => $user['name'],
+                    'avatar' => url('media/avatars/'.$user->avatar),
+                ];
+            }
+
+            foreach($following as $follower){
+                $user = $followingUsers[$follower['user_to']];
+                $array['following'][] = [
+                    'id' => $user['id'],
+                    'name' => $user['name'],
+                    'avatar' => url('media/avatars/'.$user->avatar),
+                ];
+            }
+            return response()->json($array, 200);
+            
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'usuário não encontrado'], 404);
+        }
     }
 
     public function photos(){
