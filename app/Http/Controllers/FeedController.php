@@ -83,6 +83,9 @@ class FeedController extends Controller
             ->where('type', 'photo')
             ->orderBy('created_at', 'desc')->paginate(2);
         $posts = $this->service->postListMoreInformations($postList, $id);
+        foreach($posts as $key => $post){
+            $posts[$key]['body'] = url('media/uploads/'.$posts[$key]['body']);
+        }
         return response()->json($posts, 200);
     }
 }
